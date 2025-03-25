@@ -16,6 +16,7 @@ const DrawingTool = ({ originalImage, onProcessedImage }) => {
     if (!originalImage) return;
     
     const img = new Image();
+    img.crossOrigin = 'anonymous'; // 添加跨域支持
     img.src = originalImage;
     imageRef.current = img;
     

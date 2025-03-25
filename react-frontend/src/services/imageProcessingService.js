@@ -152,38 +152,43 @@ const imageProcessingService = {
 // 前端剪裁實現
 const clientSideCrop = (imageFile, cropData) => {
   return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+    try {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // 添加跨域支持
       
-      canvas.width = cropData.width;
-      canvas.height = cropData.height;
-      
-      ctx.drawImage(
-        img,
-        cropData.x, cropData.y, cropData.width, cropData.height,
-        0, 0, cropData.width, cropData.height
-      );
-      
-      resolve(canvas.toDataURL('image/png'));
-    };
-    
-    img.onerror = (error) => {
-      reject(error);
-    };
-    
-    if (typeof imageFile === 'string') {
-      img.src = imageFile;
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        img.src = e.target.result;
+      img.onload = () => {
+        // 創建 canvas 元素
+        const canvas = document.createElement('canvas');
+        canvas.width = cropData.width;
+        canvas.height = cropData.height;
+        const ctx = canvas.getContext('2d');
+        
+        // 繪製剪裁後的圖像
+        ctx.drawImage(
+          img,
+          cropData.x, cropData.y, cropData.width, cropData.height,
+          0, 0, cropData.width, cropData.height
+        );
+        
+        // 轉換為 base64
+        const croppedImageData = canvas.toDataURL('image/png');
+        resolve(croppedImageData);
       };
-      reader.onerror = (error) => {
+      
+      img.onerror = (error) => {
+        console.error('圖像加載失敗:', error);
         reject(error);
       };
-      reader.readAsDataURL(imageFile);
+      
+      // 如果是 File 對象，轉換為 URL
+      if (imageFile instanceof File) {
+        img.src = URL.createObjectURL(imageFile);
+      } else {
+        img.src = imageFile;
+      }
+    } catch (error) {
+      console.error('剪裁過程中出錯:', error);
+      reject(error);
     }
   });
 };
@@ -191,58 +196,60 @@ const clientSideCrop = (imageFile, cropData) => {
 // 前端中心剪裁實現
 const clientSideCenterCrop = (imageFile, targetAspectRatio) => {
   return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+    try {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // 添加跨域支持
       
-      const imgWidth = img.width;
-      const imgHeight = img.height;
-      const imgAspectRatio = imgWidth / imgHeight;
-      
-      let cropWidth, cropHeight, x, y;
-      
-      if (imgAspectRatio > targetAspectRatio) {
-        // 圖片較寬，裁剪寬度
-        cropHeight = imgHeight;
-        cropWidth = imgHeight * targetAspectRatio;
-        x = (imgWidth - cropWidth) / 2;
-        y = 0;
-      } else {
-        // 圖片較高，裁剪高度
-        cropWidth = imgWidth;
-        cropHeight = imgWidth / targetAspectRatio;
-        x = 0;
-        y = (imgHeight - cropHeight) / 2;
-      }
-      
-      canvas.width = cropWidth;
-      canvas.height = cropHeight;
-      
-      ctx.drawImage(
-        img,
-        x, y, cropWidth, cropHeight,
-        0, 0, cropWidth, cropHeight
-      );
-      
-      resolve(canvas.toDataURL('image/png'));
-    };
-    
-    img.onerror = (error) => {
-      reject(error);
-    };
-    
-    if (typeof imageFile === 'string') {
-      img.src = imageFile;
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        img.src = e.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const imgWidth = img.width;
+        const imgHeight = img.height;
+        const imgAspectRatio = imgWidth / imgHeight;
+        
+        let cropWidth, cropHeight, x, y;
+        
+        if (imgAspectRatio > targetAspectRatio) {
+          // 圖片較寬，裁剪寬度
+          cropHeight = imgHeight;
+          cropWidth = imgHeight * targetAspectRatio;
+          x = (imgWidth - cropWidth) / 2;
+          y = 0;
+        } else {
+          // 圖片較高，裁剪高度
+          cropWidth = imgWidth;
+          cropHeight = imgWidth / targetAspectRatio;
+          x = 0;
+          y = (imgHeight - cropHeight) / 2;
+        }
+        
+        canvas.width = cropWidth;
+        canvas.height = cropHeight;
+        
+        ctx.drawImage(
+          img,
+          x, y, cropWidth, cropHeight,
+          0, 0, cropWidth, cropHeight
+        );
+        
+        resolve(canvas.toDataURL('image/png'));
       };
-      reader.onerror = (error) => {
+      
+      img.onerror = (error) => {
+        console.error('圖像加載失敗:', error);
         reject(error);
       };
-      reader.readAsDataURL(imageFile);
+      
+      // 如果是 File 對象，轉換為 URL
+      if (imageFile instanceof File) {
+        img.src = URL.createObjectURL(imageFile);
+      } else {
+        img.src = imageFile;
+      }
+    } catch (error) {
+      console.error('剪裁過程中出錯:', error);
+      reject(error);
     }
   });
 };
@@ -250,78 +257,80 @@ const clientSideCenterCrop = (imageFile, targetAspectRatio) => {
 // 前端背景移除實現 (使用顏色閾值)
 const clientSideRemoveBackground = (imageFile, options = {}) => {
   return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+    try {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // 添加跨域支持
       
-      canvas.width = img.width;
-      canvas.height = img.height;
-      
-      // 繪製原始圖像
-      ctx.drawImage(img, 0, 0);
-      
-      // 獲取圖像數據
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      
-      // 檢測背景色 (假設背景是圖像邊緣的顏色)
-      const edgePixels = [];
-      
-      // 獲取邊緣像素
-      for (let x = 0; x < canvas.width; x++) {
-        edgePixels.push(getPixelColor(data, x, 0, canvas.width));
-        edgePixels.push(getPixelColor(data, x, canvas.height - 1, canvas.width));
-      }
-      
-      for (let y = 0; y < canvas.height; y++) {
-        edgePixels.push(getPixelColor(data, 0, y, canvas.width));
-        edgePixels.push(getPixelColor(data, canvas.width - 1, y, canvas.width));
-      }
-      
-      // 計算背景色的平均值
-      const avgBackground = calculateAverageColor(edgePixels);
-      
-      // 設置閾值 (使用傳入的閾值或默認值)
-      const threshold = options.threshold || 30;
-      
-      // 處理每個像素
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         
-        // 如果像素顏色接近背景色，則設為透明
-        if (
-          Math.abs(r - avgBackground.r) < threshold &&
-          Math.abs(g - avgBackground.g) < threshold &&
-          Math.abs(b - avgBackground.b) < threshold
-        ) {
-          data[i + 3] = 0; // 設置 alpha 為 0 (透明)
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // 繪製原始圖像
+        ctx.drawImage(img, 0, 0);
+        
+        // 獲取圖像數據
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        // 檢測背景色 (假設背景是圖像邊緣的顏色)
+        const edgePixels = [];
+        
+        // 獲取邊緣像素
+        for (let x = 0; x < canvas.width; x++) {
+          edgePixels.push(getPixelColor(data, x, 0, canvas.width));
+          edgePixels.push(getPixelColor(data, x, canvas.height - 1, canvas.width));
         }
-      }
-      
-      // 將處理後的圖像繪製回畫布
-      ctx.putImageData(imageData, 0, 0);
-      
-      resolve(canvas.toDataURL('image/png'));
-    };
-    
-    img.onerror = (error) => {
-      reject(error);
-    };
-    
-    if (typeof imageFile === 'string') {
-      img.src = imageFile;
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        img.src = e.target.result;
+        
+        for (let y = 0; y < canvas.height; y++) {
+          edgePixels.push(getPixelColor(data, 0, y, canvas.width));
+          edgePixels.push(getPixelColor(data, canvas.width - 1, y, canvas.width));
+        }
+        
+        // 計算背景色的平均值
+        const avgBackground = calculateAverageColor(edgePixels);
+        
+        // 設置閾值 (使用傳入的閾值或默認值)
+        const threshold = options.threshold || 30;
+        
+        // 處理每個像素
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          // 如果像素顏色接近背景色，則設為透明
+          if (
+            Math.abs(r - avgBackground.r) < threshold &&
+            Math.abs(g - avgBackground.g) < threshold &&
+            Math.abs(b - avgBackground.b) < threshold
+          ) {
+            data[i + 3] = 0; // 設置 alpha 為 0 (透明)
+          }
+        }
+        
+        // 將處理後的圖像繪製回畫布
+        ctx.putImageData(imageData, 0, 0);
+        
+        resolve(canvas.toDataURL('image/png'));
       };
-      reader.onerror = (error) => {
+      
+      img.onerror = (error) => {
+        console.error('圖像加載失敗:', error);
         reject(error);
       };
-      reader.readAsDataURL(imageFile);
+      
+      // 如果是 File 對象，轉換為 URL
+      if (imageFile instanceof File) {
+        img.src = URL.createObjectURL(imageFile);
+      } else {
+        img.src = imageFile;
+      }
+    } catch (error) {
+      console.error('背景移除過程中出錯:', error);
+      reject(error);
     }
   });
 };

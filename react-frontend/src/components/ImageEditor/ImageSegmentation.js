@@ -33,6 +33,7 @@ const ImageSegmentation = ({ image, onSegmentationComplete }) => {
     const ctx = canvas.getContext('2d');
     
     const img = new Image();
+    img.crossOrigin = 'anonymous'; // 添加跨域支持
     img.onload = () => {
       // 設置畫布大小與圖像相同
       canvas.width = img.width;

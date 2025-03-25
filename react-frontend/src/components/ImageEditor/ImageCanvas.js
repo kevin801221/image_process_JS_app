@@ -53,6 +53,7 @@ const ImageCanvas = ({
 
     // Load the image
     const img = new Image();
+    img.crossOrigin = 'anonymous'; // 添加跨域支持
     img.src = image;
     imageRef.current = img;
 
