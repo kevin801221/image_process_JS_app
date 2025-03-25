@@ -1,0 +1,67 @@
+.drawing-tool {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.drawing-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.brush-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.brush-color, .brush-size {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.brush-color label, .brush-size label {
+  font-size: 14px;
+  color: #333;
+}
+
+.drawing-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.action-button {
+  padding: 8px 12px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: #3a7bc8;
+}
+
+.canvas-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.drawing-canvas {
+  display: block;
+  max-width: 100%;
+  cursor: crosshair;
+}

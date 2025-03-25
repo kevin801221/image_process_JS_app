@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { FaCopy, FaRedo, FaSave } from 'react-icons/fa';
 import useFileUpload from '../hooks/useFileUpload';
 import { imageUnderstandingApi } from '../services/api';
+import ollamaImageService from '../services/ollamaImageService';
 import './ImageUnderstandingPage.css';
 
 const ImageUnderstandingPage = () => {
@@ -43,16 +44,14 @@ const ImageUnderstandingPage = () => {
       setLoading(true);
       setError(null);
       
-      const formData = new FormData();
-      formData.append('file', file);
+      // 使用 Ollama 的 Llava 模型分析圖片
+      const response = await ollamaImageService.analyzeImage(file);
       
-      const response = await imageUnderstandingApi.analyzeImage(file);
-      
-      if (response.data.success) {
-        setAnalysis(response.data.analysis);
-        setCopy(response.data.copy);
+      if (response.success) {
+        setAnalysis(response.analysis);
+        setCopy(response.copy);
       } else {
-        setError(response.data.message || '圖片分析失敗');
+        setError(response.message || '圖片分析失敗');
       }
     } catch (err) {
       setError('圖片分析過程中發生錯誤');

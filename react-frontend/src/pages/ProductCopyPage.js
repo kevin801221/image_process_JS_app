@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaCopy, FaRedo, FaSave } from 'react-icons/fa';
 import { productCopyApi } from '../services/api';
+import ollamaService from '../services/ollamaService';
 import './ProductCopyPage.css';
 
 const ProductCopyPage = () => {
@@ -40,12 +41,13 @@ const ProductCopyPage = () => {
       setLoading(true);
       setError(null);
       
-      const response = await productCopyApi.generateCopy(formData);
+      // 使用 Ollama 的 Gemma3 模型生成文案
+      const response = await ollamaService.generateProductCopy(formData);
       
-      if (response.data.success) {
-        setGeneratedCopy(response.data.copy);
+      if (response.success) {
+        setGeneratedCopy(response.copy);
       } else {
-        setError(response.data.message || '生成文案失敗');
+        setError(response.message || '生成文案失敗');
       }
     } catch (err) {
       setError('生成文案過程中發生錯誤');
@@ -62,12 +64,13 @@ const ProductCopyPage = () => {
       setLoading(true);
       setError(null);
       
-      const response = await productCopyApi.generateCopy(formData);
+      // 使用 Ollama 的 Gemma3 模型重新生成文案
+      const response = await ollamaService.generateProductCopy(formData);
       
-      if (response.data.success) {
-        setGeneratedCopy(response.data.copy);
+      if (response.success) {
+        setGeneratedCopy(response.copy);
       } else {
-        setError(response.data.message || '重新生成文案失敗');
+        setError(response.message || '重新生成文案失敗');
       }
     } catch (err) {
       setError('重新生成文案過程中發生錯誤');

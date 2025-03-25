@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { FaImage, FaRedo, FaSave, FaDownload, FaUndo, FaCrop, FaAdjust, FaCut, FaPencilAlt, FaSync } from 'react-icons/fa';
+import { FaImage, FaRedo, FaSave, FaDownload, FaUndo, FaCrop, FaAdjust, FaCut, FaPencilAlt, FaSync, FaMagic } from 'react-icons/fa';
 import { MdOutlineColorLens, MdSettings } from 'react-icons/md';
 import ImageCanvas from '../components/ImageEditor/ImageCanvas';
 import FilterControl from '../components/ImageEditor/FilterControl';
@@ -8,6 +8,7 @@ import BackgroundRemover from '../components/ImageEditor/BackgroundRemover';
 import Cropper from '../components/ImageEditor/Cropper';
 import DrawingTool from '../components/ImageEditor/DrawingTool';
 import ImageRotator from '../components/ImageEditor/ImageRotator';
+import ImageSegmentation from '../components/ImageEditor/ImageSegmentation';
 import './ImageEditorPage.css';
 
 const ImageEditorPage = () => {
@@ -223,6 +224,13 @@ const ImageEditorPage = () => {
             setIsProcessing={setIsProcessing}
           />
         );
+      case '分割':
+        return (
+          <ImageSegmentation 
+            image={image}
+            onSegmentationComplete={handleProcessedImage}
+          />
+        );
       case '畫筆':
         return (
           <DrawingTool 
@@ -309,6 +317,13 @@ const ImageEditorPage = () => {
               >
                 <FaCut />
                 <span>背景移除</span>
+              </button>
+              <button 
+                className={`tab-button ${activeTab === '分割' ? 'active' : ''}`} 
+                onClick={() => setActiveTab('分割')}
+              >
+                <FaMagic />
+                <span>分割</span>
               </button>
               <button 
                 className={`tab-button ${activeTab === '畫筆' ? 'active' : ''}`} 
