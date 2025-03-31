@@ -44,15 +44,17 @@ Casper_imageProcessing_APP/
 - OpenCV
 - NumPy
 - Pillow
+- Flask-RESTful
 
 ### 前端
-- React
-- React Router
+- React 18
+- React Router v6
 - Axios
 - React Icons
 - HTML5 Canvas
+- Styled Components
 
-## 最近更新
+## 最近更新 (2025年3月)
 
 ### 批量上傳功能
 - 新增批量上傳頁面，支持一次處理多張圖片
@@ -73,14 +75,26 @@ cd react-frontend
 npx serve -s build
 ```
 
-### 批量上傳使用指南
+### 主要功能使用指南
+
+#### 商品圖設計
+1. 在首頁上傳您的圖片
+2. 使用右側的設計工具面板進行編輯
+3. 選擇不同的效果和樣式應用到圖片
+4. 完成後下載或保存您的圖片
+
+#### 批量上傳處理
 1. 從首頁點擊「批量上傳」按鈕進入批量處理頁面
 2. 拖拽或選擇多張圖片上傳
 3. 開啟「自動去背」選項可自動處理所有圖片
 4. 選擇背景選項應用到已去背的圖片
 5. 使用頁面頂部的功能按鈕保存或下載處理後的圖片
-- Styled Components
-- React Icons
+
+#### 圖片理解
+1. 導航到「圖像理解」頁面
+2. 上傳圖片進行分析
+3. 查看系統生成的圖片描述和標籤
+
 
 ## 專案設置
 
@@ -94,11 +108,47 @@ npx serve -s build
 
 1. 克隆專案
 ```bash
-git clone https://github.com/yourusername/Casper_imageProcessing_APP.git
-cd Casper_imageProcessing_APP
+git clone https://github.com/kevin801221/image_process_JS_app.git
+cd image_process_JS_app
 ```
 
 2. 設置後端
+```bash
+python -m venv image_env
+source image_env/bin/activate  # 在 Windows 上使用 image_env\Scripts\activate
+pip install -r requirements.txt
+```
+
+3. 設置前端
+```bash
+cd react-frontend
+npm install
+npm run build
+```
+
+4. 啟動應用
+```bash
+# 後端
+python app.py
+
+# 前端 (在另一個終端視窗)
+cd react-frontend
+npx serve -s build
+```
+
+## 貢獻與開發
+
+如果您想貢獻或參與開發，請遵循以下步驟：
+
+1. Fork 本倉庫
+2. 創建您的功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 開啟一個 Pull Request
+
+## 認證與授權
+
+本專案采用 MIT 許可證。詳細信息請參閱 [LICENSE](LICENSE) 文件。
 ```bash
 # 安裝 Python 依賴
 pip install flask flask-cors pillow opencv-python python-dotenv requests
