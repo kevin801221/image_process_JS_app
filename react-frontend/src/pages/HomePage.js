@@ -1,11 +1,14 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 import DesignToolPanel from '../components/DesignTool/DesignToolPanel';
 import ImagePreview from '../components/DesignTool/ImagePreview';
 import UploadPanel from '../components/Common/UploadPanel';
+import { FaImages } from 'react-icons/fa';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [uploadedImage, setUploadedImage] = useState(null);
   const [designOutput, setDesignOutput] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -93,9 +96,18 @@ const HomePage = () => {
     }
   };
 
+  const handleBatchUpload = () => {
+    navigate('/batch-upload');
+  };
+
   return (
     <div className="home-page">
-      <h1 className="page-title">AI 商品圖設計室</h1>
+      <div className="page-header">
+        <h1 className="page-title">AI 商品圖設計室</h1>
+        <button className="batch-upload-button" onClick={handleBatchUpload}>
+          <FaImages /> 批量上傳
+        </button>
+      </div>
       
       <div className="design-container">
         <div className="upload-preview-container">

@@ -4,10 +4,35 @@
   margin: 0 auto;
 }
 
-.page-title {
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+.page-title {
+  margin: 0;
   color: #333;
   font-size: 24px;
+}
+
+.batch-upload-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8f3e9;
+  color: #333;
+  border: 1px solid #e0d6c2;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.batch-upload-button:hover {
+  background-color: #e0d6c2;
 }
 
 .design-container {
